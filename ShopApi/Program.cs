@@ -13,6 +13,7 @@ builder.Services.AddSwaggerGen();
 // Add database
 builder.Services.AddDbContext<DataContext>(options =>
 {
+    //options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")); // If using Postgres
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
