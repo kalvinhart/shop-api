@@ -24,15 +24,22 @@ namespace ShopApi.Migrations
 
             modelBuilder.Entity("ShopApi.Models.Category", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Categories");
                 });
@@ -45,8 +52,8 @@ namespace ShopApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<Guid?>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -61,9 +68,11 @@ namespace ShopApi.Migrations
 
             modelBuilder.Entity("ShopApi.Models.Product", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("AmountSold")
                         .HasColumnType("int");
@@ -106,40 +115,20 @@ namespace ShopApi.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("ShopApi.Models.Product+Category", b =>
+            modelBuilder.Entity("ShopApi.Models.Category", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Category");
+                    b.HasOne("ShopApi.Models.Product", null)
+                        .WithMany("ProductCategories")
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("ShopApi.Models.Category+Subcategory", b =>
                 {
                     b.HasOne("ShopApi.Models.Category", null)
                         .WithMany("Subcategories")
-                        .HasForeignKey("CategoryId");
-                });
-
-            modelBuilder.Entity("ShopApi.Models.Product+Category", b =>
-                {
-                    b.HasOne("ShopApi.Models.Product", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ShopApi.Models.Category", b =>
@@ -149,7 +138,7 @@ namespace ShopApi.Migrations
 
             modelBuilder.Entity("ShopApi.Models.Product", b =>
                 {
-                    b.Navigation("Categories");
+                    b.Navigation("ProductCategories");
                 });
 #pragma warning restore 612, 618
         }
