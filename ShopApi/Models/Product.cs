@@ -13,7 +13,7 @@ namespace ShopApi.Models
         public string? Color { get; set; }
         public string? Description { get; set; }
         public string ImageUrl { get; set; } = "/images/no-image.jpg";
-        public List<Category> ProductCategories { get; set; } = new List<Category> { };
+        public List<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory> { };
         public int StockQty { get; set; } = 1;
         public int AmountSold { get; set; } = 0;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
