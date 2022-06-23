@@ -93,7 +93,7 @@ namespace ShopApi.Controllers
         [Route("subcategories")]
         public async Task<IActionResult> DeleteSubcategory(Subcategory subcategory)
         {
-            var category = await _dbContext.Categories.Include(s => s.Subcategories).Where(p => p.Id == subcategory.CategoryId).FirstAsync();
+            var category = await _dbContext.Categories.Include(s => s.Subcategories).Where(p => p.Id == subcategory.CategoryId).FirstOrDefaultAsync();
             if (category == null) return NotFound("Category not found.");
             
             var subcategoryToRemove = category.Subcategories.Find(s => s.Id == subcategory.Id);
