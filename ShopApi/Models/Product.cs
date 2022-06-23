@@ -4,7 +4,7 @@ namespace ShopApi.Models
 {
     public class Product
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string Brand { get; set; } = null!;
         [Column(TypeName = "decimal(18, 2)")]
@@ -13,7 +13,7 @@ namespace ShopApi.Models
         public string? Color { get; set; }
         public string? Description { get; set; }
         public string ImageUrl { get; set; } = "/images/no-image.jpg";
-        public List<Category> Categories { get; set; } = new List<Category> { };
+        public List<Category> ProductCategories { get; set; } = new List<Category> { };
         public int StockQty { get; set; } = 1;
         public int AmountSold { get; set; } = 0;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
@@ -24,10 +24,11 @@ namespace ShopApi.Models
             XS, S, M, L, XL
         }
 
-        public class Category
+        public class ProductCategory
         {
             public int Id { get; set; }
             public string Name { get; set; } = null!;
+            public int ProductId { get; set; }
         }
     }
 }
