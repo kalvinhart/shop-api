@@ -9,10 +9,10 @@ namespace ShopApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class CategoriesController : ControllerBase
     {
         private readonly DataContext _dbContext;
-        public CategoryController(DataContext dbContext)
+        public CategoriesController(DataContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -75,7 +75,7 @@ namespace ShopApi.Controllers
 
 
         [HttpPost]
-        [Route("subcategory")]
+        [Route("subcategories")]
         public async Task<IActionResult> AddSubcategory(Subcategory subcategory)
         {
             var category = await _dbContext.Categories.FindAsync(subcategory.CategoryId);
@@ -90,7 +90,7 @@ namespace ShopApi.Controllers
 
 
         [HttpDelete]
-        [Route("subcategory")]
+        [Route("subcategories")]
         public async Task<IActionResult> DeleteSubcategory(Subcategory subcategory)
         {
             var category = await _dbContext.Categories.Include(s => s.Subcategories).Where(p => p.Id == subcategory.CategoryId).FirstAsync();
