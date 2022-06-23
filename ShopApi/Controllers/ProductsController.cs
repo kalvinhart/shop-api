@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopApi.Data;
+using ShopApi.DTOs;
 using ShopApi.Models;
 
 namespace ShopApi.Controllers
@@ -11,10 +13,12 @@ namespace ShopApi.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly DataContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public ProductsController(DataContext context)
+        public ProductsController(DataContext context, IMapper mapper)
         {
             _dbContext = context;
+            _mapper = mapper;
         }
 
 
@@ -61,12 +65,16 @@ namespace ShopApi.Controllers
 
         [HttpPatch]
         [Route("{id}")]
-        public async Task<IActionResult> EditProduct(Product product)
+        public async Task<IActionResult> EditProduct(EditProductDto productDto)
         {
-            var oldProduct = await _dbContext.Products.FindAsync(product.Id);
-            if (oldProduct == null) return NotFound();
+            var productToEdit = await _dbContext.Products.FindAsync(productDto.Id);
+            if (productToEdit == null) return NotFound();
 
+            _mapper.Map(productDto, productToEdit);
 
+            await _dbContext.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
