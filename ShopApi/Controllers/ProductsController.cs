@@ -49,20 +49,9 @@ namespace ShopApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProduct(Product product)
+        public async Task<IActionResult> AddProduct(AddProductDto productDto)
         {
-            Product newProduct = new Product
-            {
-                Name = product.Name,
-                Brand = product.Brand,
-                Price = product.Price,
-                Color = product.Color,
-                Size = product.Size,
-                Description = product.Description,
-                ImageUrl = product.ImageUrl,
-                ProductCategories = product.ProductCategories,
-                StockQty = product.StockQty,
-            };
+            var newProduct = _mapper.Map<Product>(productDto);
 
             await _dbContext.Products.AddAsync(newProduct);
             await _dbContext.SaveChangesAsync();

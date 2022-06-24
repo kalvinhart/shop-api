@@ -8,6 +8,7 @@ namespace ShopApi.RequestHelpers
     {
         public MappingProfiles()
         {
+            CreateMap<AddProductDto, Product>();
             CreateMap<EditProductDto, Product>();
         }
     }
