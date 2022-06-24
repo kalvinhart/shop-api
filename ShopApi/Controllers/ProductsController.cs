@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopApi.Data;
 using ShopApi.DTOs;
+using ShopApi.Extensions;
 using ShopApi.Models;
 
 namespace ShopApi.Controllers
@@ -23,9 +24,15 @@ namespace ShopApi.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        public async Task<IActionResult> GetProducts(string? category, string? brands, string? colors, string? name, string? sort)
         {
-            var products = await _dbContext.Products.Include(c => c.ProductCategories).ToListAsync();
+            var query = _dbContext.Products.Include(c => c.ProductCategories)
+                .Search(name!)
+                .Filter(brands!, colors!, category!)
+                .Sort(sort!)
+                .AsQueryable();            
+
+            var products = await query.ToListAsync();
 
             return Ok(products);
         }
@@ -64,7 +71,6 @@ namespace ShopApi.Controllers
         }
 
         [HttpPatch]
-        [Route("{id}")]
         public async Task<IActionResult> EditProduct(EditProductDto productDto)
         {
             var productToEdit = await _dbContext.Products.FindAsync(productDto.Id);
